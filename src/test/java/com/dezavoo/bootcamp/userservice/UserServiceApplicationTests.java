@@ -1,4 +1,4 @@
-package com.dezavoo.bootcamp.user_service;
+package com.dezavoo.bootcamp.userservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
