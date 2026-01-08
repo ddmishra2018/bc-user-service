@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record UserRegistrationRequest (
 
-    @Email@NotBlank String email,
+    @Email@NotBlank String emailId,
     @NotBlank String name,
     @Size(min = 8) String password,
     @NotBlank String courseOpted

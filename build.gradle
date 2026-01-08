@@ -42,6 +42,10 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// This provides jakarta validation annotations and hibernate validator reference implementation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	
 	compileOnly 'org.projectlombok:lombok:1.18.30'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	

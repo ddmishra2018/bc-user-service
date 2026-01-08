@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         return buildResponse(
                 UUID.randomUUID(),
                 request.name(),
-                request.email(),
+                request.emailId(),
                 request.courseOpted()
         );
     }
