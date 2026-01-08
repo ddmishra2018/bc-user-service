@@ -1,0 +1,13 @@
+package com.dezavoo.bootcamp.userservice.exception;
+
+public enum ErrorCode {
+    USER_NOT_FOUND,
+    USER_ALREADY_EXISTS,
+    VALIDATION_ERROR,
+    REQUEST_BODY_MISSING,
+    DYNAMODB_CONDITIONAL_CHECK_FAILED,
+    DYNAMODB_THROTTLING_ERROR,
+    DYNAMODB_INTERNAL_ERROR,
+    AWS_SDK_ERROR,
+    INTERNAL_SERVER_ERROR
+}
