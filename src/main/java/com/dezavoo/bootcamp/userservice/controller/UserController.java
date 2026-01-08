@@ -1,23 +1,24 @@
 package com.dezavoo.bootcamp.userservice.controller;
 
-import com.dezavoo.bootcamp.userservice.model.User;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import com.dezavoo.bootcamp.userservice.Service.UserService;
+import com.dezavoo.bootcamp.userservice.api.UsersAPI;
+import com.dezavoo.bootcamp.userservice.dto.UserRegistrationRequest;
+import com.dezavoo.bootcamp.userservice.dto.UserResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/bootcamp/v1/users")
-public class UserController {
+@RequiredArgsConstructor
+public class UserController implements UsersAPI {
     
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     /**
      * Register a new user.
@@ -25,9 +26,9 @@ public class UserController {
      * @param user the user to register
      * @return ResponseEntity with the saved user and 201 Created status
      */
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User savedUser = userService.registerUser(user);
+    @Override
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
+        UserResponse savedUser = userService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 }

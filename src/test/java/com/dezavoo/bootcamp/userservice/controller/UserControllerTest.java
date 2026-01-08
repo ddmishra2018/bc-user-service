@@ -17,8 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.UUID;
+
 import com.dezavoo.bootcamp.userservice.Service.UserService;
-import com.dezavoo.bootcamp.userservice.model.User;
+import com.dezavoo.bootcamp.userservice.dto.UserRegistrationRequest;
+import com.dezavoo.bootcamp.userservice.dto.UserResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -42,17 +45,24 @@ class UserControllerTest {
     @DisplayName("POST /bootcamp/v1/users - Should create user and return 201 Created")
     void shouldRegisterUserSuccessfully() throws Exception {
         // 1. Arrange: Prepare mock data
-        User inputUser = new User();
-        inputUser.setName("DD Mishra");
-        inputUser.setEmail("DDMishra@google.com");
+        UserRegistrationRequest inputUser = new UserRegistrationRequest(
+                "DDMishra@google.com",
+                "DD Mishra",
+                "password123",
+                "Java"
+        );
 
-        User savedUser = new User();
-        savedUser.setId(1L);
-        savedUser.setName("DD Mishra");
-        savedUser.setEmail("DDMishra@google.com");
+        UserResponse savedUser = new UserResponse(
+                UUID.fromString("550e8400-e29b-41d4-a716-446655440000"),
+                "DD Mishra",
+                "DDMishra@google.com",
+                "Java Master Class",
+                null,
+                null
+        );
 
         // Mock the service behavior
-        when(userService.registerUser(any(User.class))).thenReturn(savedUser);
+        when(userService.registerUser(any(UserRegistrationRequest.class))).thenReturn(savedUser);
 
         // 2. Act & Assert: Perform the POST request
         mockMvc.perform(post("/bootcamp/v1/users/register")
@@ -60,12 +70,13 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(inputUser))) // Convert POJO to JSON
                 .andExpect(status().isCreated()) // Verify 201 Status
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(1L)) // Verify returned JSON fields
+                .andExpect(jsonPath("$.userId").value("550e8400-e29b-41d4-a716-446655440000")) // Verify returned JSON fields
                 .andExpect(jsonPath("$.name").value("DD Mishra"))
-                .andExpect(jsonPath("$.email").value("DDMishra@google.com"));
+                .andExpect(jsonPath("$.emailId").value("DDMishra@google.com"))
+                .andExpect(jsonPath("$.courseOpted").value("Java Master Class"));
 
         // Verify the service was actually called
-        Mockito.verify(userService, Mockito.times(1)).registerUser(any(User.class));
+        Mockito.verify(userService, Mockito.times(1)).registerUser(any(UserRegistrationRequest.class));
     }
 
     @Test

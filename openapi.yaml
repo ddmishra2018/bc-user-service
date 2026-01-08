@@ -1,0 +1,163 @@
+openapi: 3.0.3
+info:
+  title: Bootcamp User Registration API
+  description: REST API for registering, searching, and updating users for our bootcamp program.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /bootcamp/v1/users/register:
+    post:
+      summary: Register a new user
+      description: Registers a user for a bootcamp program
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid input data
+        '409':
+          description: User already exists
+
+  /bootcamp/v1/users/search:
+    get:
+      summary: Search users
+      description: Search users by emailId or name
+      operationId: searchUsers
+      parameters:
+        - name: emailId
+          in: query
+          description: Email ID of the user
+          required: false
+          schema:
+            type: string
+            format: email
+        - name: name
+          in: query
+          description: Name of the user
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of users matching search criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid search parameters
+
+  /bootcamp/v1/users/{userId}:
+    put:
+      summary: Update user details
+      description: Updates an existing user's details
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique ID of the user
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+        '400':
+          description: Invalid input data
+
+components:
+  schemas:
+    UserRegistrationRequest:
+      type: object
+      required:
+        - name
+        - emailId
+        - courseOpted
+        - password
+      properties:
+        name:
+          type: string
+          example: Ravi Kumar
+        emailId:
+          type: string
+          format: email
+          example: ravi.kumar@google.com
+        courseOpted:
+          type: string
+          example: Spring Boot Masterclass
+        password:
+          type: string
+          format: password
+          example: StrongPassword@123
+
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Ravi Kumar
+        courseOpted:
+          type: string
+          example: Advanced Spring Boot
+        password:
+          type: string
+          format: password
+          example: NewStrongPassword@123
+
+    UserResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          example: Ravi Kumar
+        emailId:
+          type: string
+          format: email
+          example: ravi.kumar@google.com
+        courseOpted:
+          type: string
+          example: Spring Boot Masterclass
+        status:
+          type: string
+          example: REGISTERED
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-01-06T10:15:30Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2026-01-06T11:00:00Z
+
